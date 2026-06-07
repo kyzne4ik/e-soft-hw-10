@@ -1,30 +1,37 @@
-import 'dotenv/config';
-import { createApp } from './app.js';
+import "dotenv/config";
+import { createApp } from "./app.js";
+import { db } from "./db.js";
 
 // ─── Repository layer (stub) ───────────────────────────────
-import { createStubUserRepository } from './repositories/stub/user.repository.stub.js';
-import { createStubCommentRepository } from './repositories/stub/comment.repository.stub.js';
-import { createStubPostRepository } from './repositories/stub/post.repository.stub.js';
-import { createStubTagRepository } from './repositories/stub/tag.repository.stub.js';
+// import { createStubUserRepository } from './repositories/stub/user.repository.stub.js';
+// import { createStubCommentRepository } from './repositories/stub/comment.repository.stub.js';
+// import { createStubPostRepository } from './repositories/stub/post.repository.stub.js';
+// import { createStubTagRepository } from './repositories/stub/tag.repository.stub.js';
+
+// ─── Repository layer (knex) ───────────────────────────────
+import { createKnexUserRepository } from "./repositories/knex/user.repository.knex.js";
+import { createKnexCommentRepository } from "./repositories/knex/comment.repository.knex.js";
+import { createKnexPostRepository } from "./repositories/knex/post.repository.knex.js";
+import { createKnexTagRepository } from "./repositories/knex/tag.repository.knex.js";
 
 // ─── Service layer ─────────────────────────────────────────
-import { createUserService } from './services/user.service.js';
-import { createPostService } from './services/post.service.js';
-import { createCommentService } from './services/comment.service.js';
-import { createTagService } from './services/tag.service.js';
+import { createUserService } from "./services/user.service.js";
+import { createPostService } from "./services/post.service.js";
+import { createCommentService } from "./services/comment.service.js";
+import { createTagService } from "./services/tag.service.js";
 
 // ─── Controller layer ──────────────────────────────────────
-import { createUserController } from './controllers/user.controller.js';
-import { createPostController } from './controllers/post.controller.js';
-import { createCommentController } from './controllers/comment.controller.js';
-import { createTagController } from './controllers/tag.controller.js';
+import { createUserController } from "./controllers/user.controller.js";
+import { createPostController } from "./controllers/post.controller.js";
+import { createCommentController } from "./controllers/comment.controller.js";
+import { createTagController } from "./controllers/tag.controller.js";
 
 // ─── Composition Root ──────────────────────────────────────
-// Repositories (stub — in-memory)
-const userRepo = createStubUserRepository();
-const commentRepo = createStubCommentRepository(userRepo);
-const postRepo = createStubPostRepository(userRepo, commentRepo, null);
-const tagRepo = createStubTagRepository(postRepo);
+// Repositories (knex)
+const userRepo = createKnexUserRepository(db);
+const commentRepo = createKnexCommentRepository(db);
+const postRepo = createKnexPostRepository(db);
+const tagRepo = createKnexTagRepository(db);
 
 // Services
 const userService = createUserService({ userRepo });
@@ -48,7 +55,7 @@ const app = await createApp({
 
 // ─── Start ─────────────────────────────────────────────────
 const port = Number(process.env.PORT) || 3000;
-const host = process.env.HOST || '0.0.0.0';
+const host = process.env.HOST || "0.0.0.0";
 
 try {
   await app.listen({ port, host });
