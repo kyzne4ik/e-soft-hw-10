@@ -5,7 +5,10 @@ import { NotFoundError } from '../errors/index.js';
  */
 export function createTagService({ tagRepo, postRepo }) {
   return {
-    async getTags() {
+    async getTags(name) {
+      if (name) {
+        return tagRepo.findByName(name);
+      }
       return tagRepo.findAll();
     },
 
