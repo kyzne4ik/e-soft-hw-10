@@ -64,7 +64,7 @@ export const createPrismaCommentRepository = () => ({
         },
       },
     });
-    return commentMap(comment);
+    return commentMap([comment])[0];
   },
   async remove(id) {
     try {

@@ -71,7 +71,9 @@ export const createPrismaPostRepository = () => ({
         },
       },
     });
-    return postByIdMap(post) ?? null;
+    if (!post) return null;
+
+    return postByIdMap(post);
   },
   async create({ userId, title, body, status }) {
     const post = await prisma.post.create({

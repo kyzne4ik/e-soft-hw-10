@@ -17,13 +17,8 @@ export const createPrismaTagRepository = () => ({
     return tag;
   },
   async findByName(name) {
-    return await prisma.tag.findFirst({
-      where: {
-        name: {
-          contains: name,
-          mode: "insensitive",
-        },
-      },
+    return await prisma.tag.findUnique({
+      where: { name },
     });
   },
   async create({ name }) {
@@ -61,7 +56,7 @@ export const createPrismaTagRepository = () => ({
       },
     });
 
-    if (!existing) return;
+    if (!existing) return false;
 
     try {
       await prisma.postTag.delete({
