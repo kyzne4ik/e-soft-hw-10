@@ -2,7 +2,7 @@
 POST http://localhost:3000/api/users
 Content-Type: application/json
 {
-    "email": "some-email-6@gmail.com",
+    "email": "some-email-8@gmail.com",
     "name": "some-name",
     "role": "user"
 }
@@ -34,4 +34,4 @@ Content-Type: application/json
     "tagIds": [ 1, 2, 3 ]
 }
 
-GET http://localhost:3000/api/tags?name=2-some-tag
+GET http://localhost:3000/api/tags?name=2-tag

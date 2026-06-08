@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique @db.VarChar(255)
+  name       String   @db.VarChar(100)
+  role       String   @default("user") @db.VarChar(20) // user|admin
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  post    Post[]
+  comment Comment[]
+
+  @@map("users")
+}
+
+model Post {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  title      String   @db.VarChar(300)
+  body       String   @db.Text
+  status     String   @default("draft") @db.VarChar(20) //draft|published
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  comment  Comment[]
+  postTags PostTag[]
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("posts")
+}
+
+model Comment {
+  id         Int      @id @default(autoincrement())
+  post_id    Int
+  author_id  Int?
+  body       String   @db.Text
+  created_at DateTime @default(now())
+
+  post   Post  @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  author User? @relation(fields: [author_id], references: [id], onDelete: SetNull)
+
+  @@map("comments")
+}
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  name String @unique @db.VarChar(50)
+
+  postTags PostTag[]
+
+  @@map("tags")
+}
+
+model PostTag {
+  post_id Int
+  tag_id  Int
+
+  post Post @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tag_id], references: [id], onDelete: Cascade)
+
+  @@id([post_id, tag_id])
+  @@map("post_tags")
+}
