@@ -8,16 +8,10 @@ import { createApp } from "./app.js";
 // import { createStubTagRepository } from './repositories/stub/tag.repository.stub.js';
 
 // ─── Repository layer (knex) ───────────────────────────────
-// import { createKnexUserRepository } from "./repositories/knex/user.repository.knex.js";
-// import { createKnexCommentRepository } from "./repositories/knex/comment.repository.knex.js";
-// import { createKnexPostRepository } from "./repositories/knex/post.repository.knex.js";
-// import { createKnexTagRepository } from "./repositories/knex/tag.repository.knex.js";
-
-// ─── Repository layer (prisma) ───────────────────────────────
-import { createPrismaUserRepository } from "./repositories/prisma/user/index.js";
-import { createPrismaCommentRepository } from "./repositories/prisma/comment/index.js";
-import { createPrismaPostRepository } from "./repositories/prisma/post/index.js";
-import { createPrismaTagRepository } from "./repositories/prisma/tag/index.js";
+import { createKnexUserRepository } from "./repositories/knex/user/index.js";
+import { createKnexCommentRepository } from "./repositories/knex/comment/index.js";
+import { createKnexPostRepository } from "./repositories/knex/post/index.js";
+import { createKnexTagRepository } from "./repositories/knex/tag/index.js";
 
 // ─── Service layer ─────────────────────────────────────────
 import { createUserService } from "./services/user.service.js";

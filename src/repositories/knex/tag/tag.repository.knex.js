@@ -13,7 +13,7 @@ export const createKnexTagRepository = (db) => ({
       (await db("tags")
         .select("*")
         // .whereRaw("name LIKE ?", [`%${name}%`])
-        .where("name", "like", `%${name}%`)
+        .where("name", name)
         .first()) ?? null
     );
   },

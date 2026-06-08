@@ -1,8 +1,11 @@
+import { isVoid } from "../../../utils/index.js";
+import { postAllMap, postDetailMap, postMap } from "./post.mapper.knex.js";
+
 /**
  * @returns {import('../interfaces.js').PostRepository}
  */
 export const createKnexPostRepository = (db) => ({
-  async findAll({ status, userId, tagId, page = 1, limit = 20 }) {
+  async findAll({ status, userId, tagId, page = 1, limit = 20 } = {}) {
     const q = db("posts as p")
       .select(
         "p.id",
@@ -45,7 +48,7 @@ export const createKnexPostRepository = (db) => ({
     const [{ count }] = await countQ.count();
 
     return {
-      data,
+      data: postAllMap(data),
       total: Number(count),
       page,
       limit,
@@ -65,8 +68,6 @@ export const createKnexPostRepository = (db) => ({
 
     if (!row) return null;
 
-    const { author_id, author_name, author_email, ...posts } = row;
-
     const comments = await db("comments as c")
       .select(
         "c.id",
@@ -84,18 +85,9 @@ export const createKnexPostRepository = (db) => ({
       .join("tags as t", "t.id", "pt.tag_id")
       .where("pt.post_id", id);
 
-    return {
-      ...posts,
-      author: {
-        id: author_id,
-        name: author_name,
-        email: author_email,
-      },
-      comments,
-      tags,
-    };
+    return postDetailMap(row, comments, tags);
   },
-  async create({ userId, title, body, status }) {
+  async create({ userId, title, body, status } = {}) {
     const [post] = await db("posts")
       .insert({
         user_id: userId,
@@ -104,9 +96,9 @@ export const createKnexPostRepository = (db) => ({
         status,
       })
       .returning("*");
-    return post;
+    return postMap(post);
   },
-  async createWithTags({ userId, title, body, status, tagIds }) {
+  async createWithTags({ userId, title, body, status, tagIds } = {}) {
     const trx = await db.transaction();
     let post;
 
@@ -120,12 +112,13 @@ export const createKnexPostRepository = (db) => ({
         })
         .returning("*");
 
-      await trx("post_tags").insert(
-        tagIds.map((tag) => ({
-          post_id: post.id,
-          tag_id: tag,
-        })),
-      );
+      if (tagIds.length > 0)
+        await trx("post_tags").insert(
+          tagIds.map((tag) => ({
+            post_id: post.id,
+            tag_id: tag,
+          })),
+        );
 
       await trx.commit();
     } catch (error) {
@@ -135,9 +128,8 @@ export const createKnexPostRepository = (db) => ({
 
     return await this.findById(post.id);
   },
-  async update(id, { title, body, status }) {
-    const existing = await db("posts").where("id", id).first();
-    if (!existing) return null;
+  async update(id, { title, body, status } = {}) {
+    if (isVoid({ title, body, status })) return this.findById(id);
 
     const [post] = await db("posts")
       .where("id", id)
@@ -148,7 +140,7 @@ export const createKnexPostRepository = (db) => ({
       })
       .returning("*");
 
-    return post;
+    return post ? postMap(post) : null;
   },
   async remove(id) {
     const deleted = await db("posts").where("id", id).delete();
