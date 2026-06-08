@@ -13,7 +13,7 @@ POST http://localhost:3000/api/users
 Content-Type: application/json
 
 {
-  "email": "alex.smith2@example.com",
+  "email": "alex.smith@example.com",
   "name": "Alex Smith",
   "role": "admin"
 }
@@ -23,7 +23,7 @@ POST http://localhost:3000/api/users
 Content-Type: application/json
 
 {
-  "email": "jane.doe2@example.com",
+  "email": "jane.doe@example.com",
   "name": "Jane Doe",
   "role": "user"
 }
@@ -31,7 +31,7 @@ Content-Type: application/json
 ### Get user by ID - ok
 GET http://localhost:3000/api/users/1
 
-### Update user - ok
+### Update user - ok 
 PATCH http://localhost:3000/api/users/2
 Content-Type: application/json
 
@@ -40,15 +40,8 @@ Content-Type: application/json
   "role": "user"
 }
 
-### Update void-user - ok
-PATCH http://localhost:3000/api/users/5
-Content-Type: application/json
-
-{
-}
-
 ### Delete user - ok
-DELETE http://localhost:3000/api/users/2
+DELETE http://localhost:3000/api/users/1
 
 ###
 # Tags
@@ -62,7 +55,7 @@ POST http://localhost:3000/api/tags
 Content-Type: application/json
 
 {
-  "name": "Future3"
+  "name": "Future"
 }
 
 ### Create tag "Science" - ok
@@ -70,7 +63,7 @@ POST http://localhost:3000/api/tags
 Content-Type: application/json
 
 {
-  "name": "Science3"
+  "name": "Science"
 }
 
 ###
@@ -85,7 +78,7 @@ POST http://localhost:3000/api/posts
 Content-Type: application/json
 
 {
-  "userId": 4,
+  "userId": 2,
   "title": "The Wonders of Quantum Computing",
   "body": "Quantum computing is a type of computing that uses quantum-mechanical phenomena...",
   "status": "draft",
@@ -93,29 +86,22 @@ Content-Type: application/json
 }
 
 ### Get post by ID - ok
-GET http://localhost:3000/api/posts/5
+GET http://localhost:3000/api/posts/3
 
 ### Update post to Published - ok
-PATCH http://localhost:3000/api/posts/5
+PATCH http://localhost:3000/api/posts/3
 Content-Type: application/json
 
 {
-  "title": "The Wonders of Quantum Computing (Updated) --",
+  "title": "The Wonders of Quantum Computing (Updated)",
   "status": "published"
 }
 
-### Update void-post to Published - ok
-PATCH http://localhost:3000/api/posts/5
-Content-Type: application/json
-
-{
-}
-
 ### Attach tag to post - ok
-POST http://localhost:3000/api/posts/5/tags/1
+POST http://localhost:3000/api/posts/3/tags/1
 
 ### Detach tag from post - ok
-DELETE http://localhost:3000/api/posts/5/tags/1
+DELETE http://localhost:3000/api/posts/3/tags/1
 
 ### Delete post - ok
 DELETE http://localhost:3000/api/posts/10
@@ -126,16 +112,15 @@ DELETE http://localhost:3000/api/posts/10
 
 ### Get comments for a post - ok
 GET http://localhost:3000/api/posts/3/comments?page=1&limit=10
-GET http://localhost:3000/api/posts/1/comments
 
 ### Create comment - ok
-POST http://localhost:3000/api/posts/5/comments
+POST http://localhost:3000/api/posts/3/comments
 Content-Type: application/json
 
 {
-  "authorId": 4,
+  "authorId": 2,
   "body": "This is an incredibly insightful article about the future of tech!"
 }
 
 ### Delete comment - ok
-DELETE http://localhost:3000/api/comments/25
+DELETE http://localhost:3000/api/comments/10

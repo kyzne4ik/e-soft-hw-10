@@ -1,6 +1,5 @@
 import "dotenv/config";
 import { createApp } from "./app.js";
-import { db } from "./db.js";
 
 // ─── Repository layer (stub) ───────────────────────────────
 // import { createStubUserRepository } from './repositories/stub/user.repository.stub.js';

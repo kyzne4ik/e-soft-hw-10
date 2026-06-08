@@ -17,13 +17,8 @@ export const createPrismaTagRepository = () => ({
     return tag;
   },
   async findByName(name) {
-    return await prisma.tag.findFirst({
-      where: {
-        name: {
-          contains: name,
-          mode: "insensitive",
-        },
-      },
+    return await prisma.tag.findUnique({
+      where: { name },
     });
   },
   async create({ name }) {
@@ -35,9 +30,9 @@ export const createPrismaTagRepository = () => ({
   async attachToPost(postId, tagId) {
     const existing = await prisma.postTag.findUnique({
       where: {
-        post_id_tag_id: {
-          post_id: postId,
-          tag_id: tagId,
+        postId_tagId: {
+          postId,
+          tagId,
         },
       },
     });
@@ -46,35 +41,25 @@ export const createPrismaTagRepository = () => ({
 
     await prisma.postTag.create({
       data: {
-        post_id: postId,
-        tag_id: tagId,
+        postId,
+        tagId,
       },
     });
   },
   async detachFromPost(postId, tagId) {
-    const existing = await prisma.postTag.findUnique({
-      where: {
-        post_id_tag_id: {
-          post_id: postId,
-          tag_id: tagId,
-        },
-      },
-    });
-
-    if (!existing) return;
-
     try {
       await prisma.postTag.delete({
         where: {
-          post_id_tag_id: {
-            post_id: postId,
-            tag_id: tagId,
+          postId_tagId: {
+            postId,
+            tagId,
           },
         },
       });
       return true;
     } catch (e) {
-      return false;
+      if (e.code === "P2025") return false;
+      throw e;
     }
   },
 });

@@ -5,8 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  provider     = "prisma-client-js"
+  output       = "../src/generated/prisma"
   moduleFormat = "esm"
 }
 
@@ -16,45 +16,45 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
-  email      String   @unique @db.VarChar(255)
-  name       String   @db.VarChar(100)
-  role       String   @default("user") @db.VarChar(20) // user|admin
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  email     String   @unique @db.VarChar(255)
+  name      String   @db.VarChar(100)
+  role      String   @default("user") @db.VarChar(20) // user|admin
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  post    Post[]
-  comment Comment[]
+  posts    Post[]
+  comments Comment[]
 
   @@map("users")
 }
 
 model Post {
-  id         Int      @id @default(autoincrement())
-  user_id    Int
-  title      String   @db.VarChar(300)
-  body       String   @db.Text
-  status     String   @default("draft") @db.VarChar(20) //draft|published
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  title     String   @db.VarChar(300)
+  body      String?   @db.Text
+  status    String   @default("draft") @db.VarChar(20) //draft|published 
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  comment  Comment[]
+  comments Comment[]
   postTags PostTag[]
 
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("posts")
 }
 
 model Comment {
-  id         Int      @id @default(autoincrement())
-  post_id    Int
-  author_id  Int?
-  body       String   @db.Text
-  created_at DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  postId    Int      @map("post_id")
+  authorId  Int?     @map("author_id")
+  body      String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
 
-  post   Post  @relation(fields: [post_id], references: [id], onDelete: Cascade)
-  author User? @relation(fields: [author_id], references: [id], onDelete: SetNull)
+  post   Post  @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User? @relation(fields: [authorId], references: [id], onDelete: SetNull)
 
   @@map("comments")
 }
@@ -69,12 +69,12 @@ model Tag {
 }
 
 model PostTag {
-  post_id Int
-  tag_id  Int
+  postId Int @map("post_id")
+  tagId  Int @map("tag_id")
 
-  post Post @relation(fields: [post_id], references: [id], onDelete: Cascade)
-  tag  Tag  @relation(fields: [tag_id], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
-  @@id([post_id, tag_id])
+  @@id([postId, tagId])
   @@map("post_tags")
 }
