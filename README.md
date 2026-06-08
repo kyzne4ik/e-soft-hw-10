@@ -13,17 +13,17 @@
 _PRODUCTION_
 
 ```bash
-➜  e-soft-hw-10 git:(feat/prisma) ✗ NODE_ENV=production node /home/nesk/projects/e-soft/e-soft-hw-10/src/repositories/demos/benchmark.js
-[bench]-[ prisma ]: 824.855ms
-[bench]-[ knex ]: 258.966ms
+➜  e-soft-hw-10 git:(feat/prisma) ✗ NODE_ENV=production node /home/nesk/projects/e-soft/e-soft-hw-10/src/demos/benchmark.js
+    [bench]-[ prisma ]: 131.354ms
+    [bench]-[ knex ]: 44.637ms
 ```
 
 _DEVELOPMENT_
 
 ```bash
-➜  e-soft-hw-10 git:(feat/prisma) ✗ NODE_ENV=development node /home/nesk/projects/e-soft/e-soft-hw-10/src/repositories/demos/benchmark.js
-[bench]-[ prisma ]: 956.823ms
-[bench]-[ knex ]: 247.351ms
+➜  e-soft-hw-10 git:(feat/prisma) ✗ NODE_ENV=development node /home/nesk/projects/e-soft/e-soft-hw-10/src/demos/benchmark.js
+    [bench]-[ prisma ]: 144.703ms
+    [bench]-[ knex ]: 44.426ms
 ```
 
 ### Ответы на вопросы:
@@ -31,7 +31,7 @@ _DEVELOPMENT_
 1. Почему сервисы и контроллеры **не изменились** при замене stub → Knex → Prisma? Какой принцип это обеспечивает?
 
 *Ответ:* 
-  Потому что мы использовали паттерн `DI (dependency-injection)` с `factory`, 
+  Потому что мы использовали паттерн `DIP (dependency-injection-principle)` с `factory`, 
   которые вместе позволяют независеть от конкретной реализации внутренного модуля от внешнего и связывать модули лишь интерфейсом.
 
 2. Что такое N+1 проблема? Покажите «плохой» и «хороший» вариант из вашего кода.
