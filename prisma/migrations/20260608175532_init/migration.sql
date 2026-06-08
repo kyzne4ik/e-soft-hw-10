@@ -15,7 +15,7 @@ CREATE TABLE "posts" (
     "id" SERIAL NOT NULL,
     "user_id" INTEGER NOT NULL,
     "title" VARCHAR(300) NOT NULL,
-    "body" TEXT NOT NULL,
+    "body" TEXT,
     "status" VARCHAR(20) NOT NULL DEFAULT 'draft',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
