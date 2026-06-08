@@ -1,0 +1,125 @@
+@baseUrl = http://localhost:3000
+
+### Health Check - ok
+GET {{baseUrl}}/health
+
+###
+# Users
+###
+
+### Get all users - ok
+GET {{baseUrl}}/api/users?page=2&limit=5
+
+### Create user - ok
+# @name createUser
+POST {{baseUrl}}/api/users
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "name": "Test User",
+  "role": "user"
+}
+
+### Store userId
+@userId = {{createUser.response.body.id}}
+
+### Get user by ID
+GET {{baseUrl}}/api/users/{{userId}}
+
+### Update user
+PATCH {{baseUrl}}/api/users/{{userId}}
+Content-Type: application/json
+
+{
+  "name": "Updated Test User"
+}
+
+### Delete user
+DELETE {{baseUrl}}/api/users/{{userId}}
+
+###
+# Tags
+###
+
+### Get all tags
+GET {{baseUrl}}/api/tags
+
+### Create tag
+# @name createTag
+POST {{baseUrl}}/api/tags
+Content-Type: application/json
+
+{
+  "name": "Technology"
+}
+
+### Store tagId
+@tagId = {{createTag.response.body.id}}
+
+###
+# Posts
+###
+
+### Get all posts
+GET {{baseUrl}}/api/posts?status=published&page=1&limit=10
+
+### Create post
+# @name createPost
+POST {{baseUrl}}/api/posts
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "title": "My First Post",
+  "body": "This is the content of the first post",
+  "status": "published",
+  "tagIds": [{{tagId}}]
+}
+
+### Store postId
+@postId = {{createPost.response.body.id}}
+
+### Get post by ID
+GET {{baseUrl}}/api/posts/{{postId}}
+
+### Update post
+PATCH {{baseUrl}}/api/posts/{{postId}}
+Content-Type: application/json
+
+{
+  "title": "Updated Post Title",
+  "status": "published"
+}
+
+### Attach tag to post
+POST {{baseUrl}}/api/posts/{{postId}}/tags/{{tagId}}
+
+### Detach tag from post
+DELETE {{baseUrl}}/api/posts/{{postId}}/tags/{{tagId}}
+
+### Delete post
+DELETE {{baseUrl}}/api/posts/{{postId}}
+
+###
+# Comments
+###
+
+### Get comments for a post
+GET {{baseUrl}}/api/posts/1/comments?page=1&limit=5
+
+### Create comment
+# @name createComment
+POST {{baseUrl}}/api/posts/1/comments
+Content-Type: application/json
+
+{
+  "authorId": 1,
+  "body": "This is a great post!"
+}
+
+### Store commentId
+@commentId = {{createComment.response.body.id}}
+
+### Delete comment
+DELETE {{baseUrl}}/api/comments/{{commentId}}
