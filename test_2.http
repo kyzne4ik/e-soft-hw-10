@@ -1,37 +1,37 @@
-### Health Check
+### Health Check - ok
 GET http://localhost:3000/health
 
 ###
 # Users
 ###
 
-### Get all users
+### Get all users - ok
 GET http://localhost:3000/api/users?page=1&limit=20
 
-### Create user (Admin)
+### Create user (Admin) - ok
 POST http://localhost:3000/api/users
 Content-Type: application/json
 
 {
-  "email": "alex.smith@example.com",
+  "email": "alex.smith2@example.com",
   "name": "Alex Smith",
   "role": "admin"
 }
 
-### Create user (Regular)
+### Create user (Regular) - ok
 POST http://localhost:3000/api/users
 Content-Type: application/json
 
 {
-  "email": "jane.doe@example.com",
+  "email": "jane.doe2@example.com",
   "name": "Jane Doe",
   "role": "user"
 }
 
-### Get user by ID
+### Get user by ID - ok
 GET http://localhost:3000/api/users/1
 
-### Update user
+### Update user - ok
 PATCH http://localhost:3000/api/users/2
 Content-Type: application/json
 
@@ -40,87 +40,88 @@ Content-Type: application/json
   "role": "user"
 }
 
-### Delete user
-DELETE http://localhost:3000/api/users/1
+### Delete user - ok
+DELETE http://localhost:3000/api/users/2
 
 ###
 # Tags
 ###
 
-### Get all tags
+### Get all tags - ok
 GET http://localhost:3000/api/tags
 
-### Create tag "Future"
+### Create tag "Future" - ok
 POST http://localhost:3000/api/tags
 Content-Type: application/json
 
 {
-  "name": "Future"
+  "name": "Future3"
 }
 
-### Create tag "Science"
+### Create tag "Science" - ok
 POST http://localhost:3000/api/tags
 Content-Type: application/json
 
 {
-  "name": "Science"
+  "name": "Science3"
 }
 
 ###
 # Posts
 ###
 
-### Get all published posts
+### Get all published posts - ok
 GET http://localhost:3000/api/posts?status=published&limit=10
 
-### Create post as Draft
+### Create post as Draft - ok
 POST http://localhost:3000/api/posts
 Content-Type: application/json
 
 {
-  "userId": 2,
+  "userId": 4,
   "title": "The Wonders of Quantum Computing",
   "body": "Quantum computing is a type of computing that uses quantum-mechanical phenomena...",
   "status": "draft",
   "tagIds": [1, 2]
 }
 
-### Get post by ID
-GET http://localhost:3000/api/posts/3
+### Get post by ID - ok
+GET http://localhost:3000/api/posts/5
 
-### Update post to Published
-PATCH http://localhost:3000/api/posts/3
+### Update post to Published - ok
+PATCH http://localhost:3000/api/posts/5
 Content-Type: application/json
 
 {
-  "title": "The Wonders of Quantum Computing (Updated)",
+  "title": "The Wonders of Quantum Computing (Updated) --",
   "status": "published"
 }
 
-### Attach tag to post
-POST http://localhost:3000/api/posts/3/tags/1
+### Attach tag to post - ok
+POST http://localhost:3000/api/posts/5/tags/1
 
-### Detach tag from post
-DELETE http://localhost:3000/api/posts/3/tags/1
+### Detach tag from post - ok
+DELETE http://localhost:3000/api/posts/5/tags/1
 
-### Delete post
+### Delete post - ok
 DELETE http://localhost:3000/api/posts/10
 
 ###
 # Comments
 ###
 
-### Get comments for a post
+### Get comments for a post - ok
 GET http://localhost:3000/api/posts/3/comments?page=1&limit=10
+GET http://localhost:3000/api/posts/1/comments
 
-### Create comment
-POST http://localhost:3000/api/posts/3/comments
+### Create comment - ok
+POST http://localhost:3000/api/posts/5/comments
 Content-Type: application/json
 
 {
-  "authorId": 2,
+  "authorId": 4,
   "body": "This is an incredibly insightful article about the future of tech!"
 }
 
-### Delete comment
-DELETE http://localhost:3000/api/comments/10
+### Delete comment - ok
+DELETE http://localhost:3000/api/comments/25
