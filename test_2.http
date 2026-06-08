@@ -1,0 +1,126 @@
+### Health Check
+GET http://localhost:3000/health
+
+###
+# Users
+###
+
+### Get all users
+GET http://localhost:3000/api/users?page=1&limit=20
+
+### Create user (Admin)
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "email": "alex.smith@example.com",
+  "name": "Alex Smith",
+  "role": "admin"
+}
+
+### Create user (Regular)
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "email": "jane.doe@example.com",
+  "name": "Jane Doe",
+  "role": "user"
+}
+
+### Get user by ID
+GET http://localhost:3000/api/users/1
+
+### Update user
+PATCH http://localhost:3000/api/users/2
+Content-Type: application/json
+
+{
+  "name": "Alex Smith Jr.",
+  "role": "user"
+}
+
+### Delete user
+DELETE http://localhost:3000/api/users/1
+
+###
+# Tags
+###
+
+### Get all tags
+GET http://localhost:3000/api/tags
+
+### Create tag "Future"
+POST http://localhost:3000/api/tags
+Content-Type: application/json
+
+{
+  "name": "Future"
+}
+
+### Create tag "Science"
+POST http://localhost:3000/api/tags
+Content-Type: application/json
+
+{
+  "name": "Science"
+}
+
+###
+# Posts
+###
+
+### Get all published posts
+GET http://localhost:3000/api/posts?status=published&limit=10
+
+### Create post as Draft
+POST http://localhost:3000/api/posts
+Content-Type: application/json
+
+{
+  "userId": 2,
+  "title": "The Wonders of Quantum Computing",
+  "body": "Quantum computing is a type of computing that uses quantum-mechanical phenomena...",
+  "status": "draft",
+  "tagIds": [1, 2]
+}
+
+### Get post by ID
+GET http://localhost:3000/api/posts/3
+
+### Update post to Published
+PATCH http://localhost:3000/api/posts/3
+Content-Type: application/json
+
+{
+  "title": "The Wonders of Quantum Computing (Updated)",
+  "status": "published"
+}
+
+### Attach tag to post
+POST http://localhost:3000/api/posts/3/tags/1
+
+### Detach tag from post
+DELETE http://localhost:3000/api/posts/3/tags/1
+
+### Delete post
+DELETE http://localhost:3000/api/posts/10
+
+###
+# Comments
+###
+
+### Get comments for a post
+GET http://localhost:3000/api/posts/3/comments?page=1&limit=10
+
+### Create comment
+POST http://localhost:3000/api/posts/3/comments
+Content-Type: application/json
+
+{
+  "authorId": 2,
+  "body": "This is an incredibly insightful article about the future of tech!"
+}
+
+### Delete comment
+DELETE http://localhost:3000/api/comments/10
