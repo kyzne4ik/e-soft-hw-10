@@ -1,0 +1,141 @@
+### Health Check - ok
+GET http://localhost:3000/health
+
+###
+# Users
+###
+
+### Get all users - ok
+GET http://localhost:3000/api/users?page=1&limit=20
+
+### Create user (Admin) - ok
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "email": "alex.smith2@example.com",
+  "name": "Alex Smith",
+  "role": "admin"
+}
+
+### Create user (Regular) - ok
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "email": "jane.doe2@example.com",
+  "name": "Jane Doe",
+  "role": "user"
+}
+
+### Get user by ID - ok
+GET http://localhost:3000/api/users/1
+
+### Update user - ok
+PATCH http://localhost:3000/api/users/2
+Content-Type: application/json
+
+{
+  "name": "Alex Smith Jr.",
+  "role": "user"
+}
+
+### Update void-user - ok
+PATCH http://localhost:3000/api/users/5
+Content-Type: application/json
+
+{
+}
+
+### Delete user - ok
+DELETE http://localhost:3000/api/users/2
+
+###
+# Tags
+###
+
+### Get all tags - ok
+GET http://localhost:3000/api/tags
+
+### Create tag "Future" - ok
+POST http://localhost:3000/api/tags
+Content-Type: application/json
+
+{
+  "name": "Future3"
+}
+
+### Create tag "Science" - ok
+POST http://localhost:3000/api/tags
+Content-Type: application/json
+
+{
+  "name": "Science3"
+}
+
+###
+# Posts
+###
+
+### Get all published posts - ok
+GET http://localhost:3000/api/posts?status=published&limit=10
+
+### Create post as Draft - ok
+POST http://localhost:3000/api/posts
+Content-Type: application/json
+
+{
+  "userId": 4,
+  "title": "The Wonders of Quantum Computing",
+  "body": "Quantum computing is a type of computing that uses quantum-mechanical phenomena...",
+  "status": "draft",
+  "tagIds": [1, 2]
+}
+
+### Get post by ID - ok
+GET http://localhost:3000/api/posts/5
+
+### Update post to Published - ok
+PATCH http://localhost:3000/api/posts/5
+Content-Type: application/json
+
+{
+  "title": "The Wonders of Quantum Computing (Updated) --",
+  "status": "published"
+}
+
+### Update void-post to Published - ok
+PATCH http://localhost:3000/api/posts/5
+Content-Type: application/json
+
+{
+}
+
+### Attach tag to post - ok
+POST http://localhost:3000/api/posts/5/tags/1
+
+### Detach tag from post - ok
+DELETE http://localhost:3000/api/posts/5/tags/1
+
+### Delete post - ok
+DELETE http://localhost:3000/api/posts/10
+
+###
+# Comments
+###
+
+### Get comments for a post - ok
+GET http://localhost:3000/api/posts/3/comments?page=1&limit=10
+GET http://localhost:3000/api/posts/1/comments
+
+### Create comment - ok
+POST http://localhost:3000/api/posts/5/comments
+Content-Type: application/json
+
+{
+  "authorId": 4,
+  "body": "This is an incredibly insightful article about the future of tech!"
+}
+
+### Delete comment - ok
+DELETE http://localhost:3000/api/comments/25
