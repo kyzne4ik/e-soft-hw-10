@@ -12,5 +12,3 @@ export const prisma = new PrismaClient({
       ? ["query", "info", "warn", "error"]
       : ["error"],
 });
-
-export * from "./generated/prisma/client.js";
