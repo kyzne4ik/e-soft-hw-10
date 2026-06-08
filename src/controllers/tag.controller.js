@@ -4,7 +4,12 @@
 export function createTagController({ tagService }) {
   return {
     async list(request, reply) {
-      const tags = await tagService.getTags();
+      console.log(
+        request.params,
+        request.query,
+        request.body
+      )
+      const tags = await tagService.getTags(request.query.name);
       return reply.send(tags);
     },
 

@@ -1,0 +1,37 @@
+
+POST http://localhost:3000/api/users
+Content-Type: application/json
+{
+    "email": "some-email-6@gmail.com",
+    "name": "some-name",
+    "role": "user"
+}
+
+POST http://localhost:3000/api/posts
+Content-Type: application/json
+{
+    "userId": 1,
+    "title": "some-title-2",
+    "body": "some-body",
+    "status": "published"
+}
+
+GET http://localhost:3000/api/posts
+
+GET http://localhost:3000/api/posts/1
+
+GET http://localhost:3000/api/posts?tagId=1
+
+GET http://localhost:3000/api/posts?page=2
+
+POST http://localhost:3000/api/posts
+Content-Type: application/json
+{
+    "userId": 1,
+    "title": "some-title-10",
+    "body": "some-body",
+    "status": "published",
+    "tagIds": [ 1, 2, 3 ]
+}
+
+GET http://localhost:3000/api/tags?name=2-some-tag
