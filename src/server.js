@@ -27,11 +27,11 @@ import { createCommentController } from "./controllers/comment.controller.js";
 import { createTagController } from "./controllers/tag.controller.js";
 
 // ─── Composition Root ──────────────────────────────────────
-// Repositories (knex)
-const userRepo = createKnexUserRepository(db);
-const commentRepo = createKnexCommentRepository(db);
-const postRepo = createKnexPostRepository(db);
-const tagRepo = createKnexTagRepository(db);
+// Repositories (prisma)
+const userRepo = createPrismaUserRepository();
+const commentRepo = createPrismaCommentRepository();
+const postRepo = createPrismaPostRepository();
+const tagRepo = createPrismaTagRepository();
 
 // Services
 const userService = createUserService({ userRepo });
