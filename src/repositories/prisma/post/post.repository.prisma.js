@@ -131,7 +131,8 @@ export const createPrismaPostRepository = () => ({
       await prisma.post.delete({ where: { id } });
       return true;
     } catch (e) {
-      return false;
+      if (e.code === "P2025") return false;
+      throw e;
     }
   },
 });

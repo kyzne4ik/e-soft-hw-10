@@ -71,7 +71,8 @@ export const createPrismaCommentRepository = () => ({
       await prisma.comment.delete({ where: { id } });
       return true;
     } catch (e) {
-      return false;
+      if (e.code === "P2025") return false;
+      throw e;
     }
   },
 });

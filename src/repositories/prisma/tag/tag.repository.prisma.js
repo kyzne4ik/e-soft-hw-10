@@ -47,17 +47,6 @@ export const createPrismaTagRepository = () => ({
     });
   },
   async detachFromPost(postId, tagId) {
-    const existing = await prisma.postTag.findUnique({
-      where: {
-        postId_tagId: {
-          postId,
-          tagId,
-        },
-      },
-    });
-
-    if (!existing) return false;
-
     try {
       await prisma.postTag.delete({
         where: {
@@ -69,7 +58,8 @@ export const createPrismaTagRepository = () => ({
       });
       return true;
     } catch (e) {
-      return false;
+      if (e.code === "P2025") return false;
+      throw e;
     }
   },
 });
