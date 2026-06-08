@@ -9,10 +9,16 @@ import { db } from "./db.js";
 // import { createStubTagRepository } from './repositories/stub/tag.repository.stub.js';
 
 // ─── Repository layer (knex) ───────────────────────────────
-import { createKnexUserRepository } from "./repositories/knex/user.repository.knex.js";
-import { createKnexCommentRepository } from "./repositories/knex/comment.repository.knex.js";
-import { createKnexPostRepository } from "./repositories/knex/post.repository.knex.js";
-import { createKnexTagRepository } from "./repositories/knex/tag.repository.knex.js";
+// import { createKnexUserRepository } from "./repositories/knex/user.repository.knex.js";
+// import { createKnexCommentRepository } from "./repositories/knex/comment.repository.knex.js";
+// import { createKnexPostRepository } from "./repositories/knex/post.repository.knex.js";
+// import { createKnexTagRepository } from "./repositories/knex/tag.repository.knex.js";
+
+// ─── Repository layer (prisma) ───────────────────────────────
+import { createPrismaUserRepository } from "./repositories/prisma/user/index.js";
+import { createPrismaCommentRepository } from "./repositories/prisma/comment/index.js";
+import { createPrismaPostRepository } from "./repositories/prisma/post/index.js";
+import { createPrismaTagRepository } from "./repositories/prisma/tag/index.js";
 
 // ─── Service layer ─────────────────────────────────────────
 import { createUserService } from "./services/user.service.js";
@@ -27,11 +33,11 @@ import { createCommentController } from "./controllers/comment.controller.js";
 import { createTagController } from "./controllers/tag.controller.js";
 
 // ─── Composition Root ──────────────────────────────────────
-// Repositories (knex)
-const userRepo = createKnexUserRepository(db);
-const commentRepo = createKnexCommentRepository(db);
-const postRepo = createKnexPostRepository(db);
-const tagRepo = createKnexTagRepository(db);
+// Repositories (prisma)
+const userRepo = createPrismaUserRepository();
+const commentRepo = createPrismaCommentRepository();
+const postRepo = createPrismaPostRepository();
+const tagRepo = createPrismaTagRepository();
 
 // Services
 const userService = createUserService({ userRepo });
