@@ -84,7 +84,7 @@ export const createPrismaPostRepository = () => ({
         status,
       },
     });
-    return post ?? null;
+    return post;
   },
   async createWithTags({ userId, title, body, status, tagIds }) {
     const post = await prisma.$transaction(async (tx) => {

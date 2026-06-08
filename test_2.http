@@ -1,125 +1,126 @@
-@baseUrl = http://localhost:3000
-
 ### Health Check - ok
-GET {{baseUrl}}/health
+GET http://localhost:3000/health
 
 ###
 # Users
 ###
 
 ### Get all users - ok
-GET {{baseUrl}}/api/users?page=2&limit=5
+GET http://localhost:3000/api/users?page=1&limit=20
 
-### Create user - ok
-# @name createUser
-POST {{baseUrl}}/api/users
+### Create user (Admin) - ok
+POST http://localhost:3000/api/users
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
-  "name": "Test User",
+  "email": "alex.smith@example.com",
+  "name": "Alex Smith",
+  "role": "admin"
+}
+
+### Create user (Regular) - ok
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "email": "jane.doe@example.com",
+  "name": "Jane Doe",
   "role": "user"
 }
 
-### Store userId
-@userId = {{createUser.response.body.id}}
+### Get user by ID - ok
+GET http://localhost:3000/api/users/1
 
-### Get user by ID
-GET {{baseUrl}}/api/users/{{userId}}
-
-### Update user
-PATCH {{baseUrl}}/api/users/{{userId}}
+### Update user - ok 
+PATCH http://localhost:3000/api/users/2
 Content-Type: application/json
 
 {
-  "name": "Updated Test User"
+  "name": "Alex Smith Jr.",
+  "role": "user"
 }
 
-### Delete user
-DELETE {{baseUrl}}/api/users/{{userId}}
+### Delete user - ok
+DELETE http://localhost:3000/api/users/1
 
 ###
 # Tags
 ###
 
-### Get all tags
-GET {{baseUrl}}/api/tags
+### Get all tags - ok
+GET http://localhost:3000/api/tags
 
-### Create tag
-# @name createTag
-POST {{baseUrl}}/api/tags
+### Create tag "Future" - ok
+POST http://localhost:3000/api/tags
 Content-Type: application/json
 
 {
-  "name": "Technology"
+  "name": "Future"
 }
 
-### Store tagId
-@tagId = {{createTag.response.body.id}}
+### Create tag "Science" - ok
+POST http://localhost:3000/api/tags
+Content-Type: application/json
+
+{
+  "name": "Science"
+}
 
 ###
 # Posts
 ###
 
-### Get all posts
-GET {{baseUrl}}/api/posts?status=published&page=1&limit=10
+### Get all published posts - ok
+GET http://localhost:3000/api/posts?status=published&limit=10
 
-### Create post
-# @name createPost
-POST {{baseUrl}}/api/posts
+### Create post as Draft - ok
+POST http://localhost:3000/api/posts
 Content-Type: application/json
 
 {
-  "userId": 1,
-  "title": "My First Post",
-  "body": "This is the content of the first post",
-  "status": "published",
-  "tagIds": [{{tagId}}]
+  "userId": 2,
+  "title": "The Wonders of Quantum Computing",
+  "body": "Quantum computing is a type of computing that uses quantum-mechanical phenomena...",
+  "status": "draft",
+  "tagIds": [1, 2]
 }
 
-### Store postId
-@postId = {{createPost.response.body.id}}
+### Get post by ID - ok
+GET http://localhost:3000/api/posts/3
 
-### Get post by ID
-GET {{baseUrl}}/api/posts/{{postId}}
-
-### Update post
-PATCH {{baseUrl}}/api/posts/{{postId}}
+### Update post to Published - ok
+PATCH http://localhost:3000/api/posts/3
 Content-Type: application/json
 
 {
-  "title": "Updated Post Title",
+  "title": "The Wonders of Quantum Computing (Updated)",
   "status": "published"
 }
 
-### Attach tag to post
-POST {{baseUrl}}/api/posts/{{postId}}/tags/{{tagId}}
+### Attach tag to post - ok
+POST http://localhost:3000/api/posts/3/tags/1
 
-### Detach tag from post
-DELETE {{baseUrl}}/api/posts/{{postId}}/tags/{{tagId}}
+### Detach tag from post - ok
+DELETE http://localhost:3000/api/posts/3/tags/1
 
-### Delete post
-DELETE {{baseUrl}}/api/posts/{{postId}}
+### Delete post - ok
+DELETE http://localhost:3000/api/posts/10
 
 ###
 # Comments
 ###
 
-### Get comments for a post
-GET {{baseUrl}}/api/posts/1/comments?page=1&limit=5
+### Get comments for a post - ok
+GET http://localhost:3000/api/posts/3/comments?page=1&limit=10
 
-### Create comment
-# @name createComment
-POST {{baseUrl}}/api/posts/1/comments
+### Create comment - ok
+POST http://localhost:3000/api/posts/3/comments
 Content-Type: application/json
 
 {
-  "authorId": 1,
-  "body": "This is a great post!"
+  "authorId": 2,
+  "body": "This is an incredibly insightful article about the future of tech!"
 }
 
-### Store commentId
-@commentId = {{createComment.response.body.id}}
-
-### Delete comment
-DELETE {{baseUrl}}/api/comments/{{commentId}}
+### Delete comment - ok
+DELETE http://localhost:3000/api/comments/10
