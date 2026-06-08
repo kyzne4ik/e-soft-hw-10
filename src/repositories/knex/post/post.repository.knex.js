@@ -1,3 +1,4 @@
+import { isVoid } from "../../../utils/index.js";
 import { postAllMap, postDetailMap, postMap } from "./post.mapper.knex.js";
 
 /**
@@ -110,7 +111,7 @@ export const createKnexPostRepository = (db) => ({
           status,
         })
         .returning("*");
-      
+
       if (tagIds.length > 0)
         await trx("post_tags").insert(
           tagIds.map((tag) => ({
@@ -128,6 +129,8 @@ export const createKnexPostRepository = (db) => ({
     return await this.findById(post.id);
   },
   async update(id, { title, body, status } = {}) {
+    if (isVoid({ title, body, status })) return this.findById(id);
+
     const [post] = await db("posts")
       .where("id", id)
       .update({

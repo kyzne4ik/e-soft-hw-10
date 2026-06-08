@@ -1,3 +1,4 @@
+import { isVoid } from "../../../utils/index.js";
 import { userMap, usersMap } from "./user.mapper.knex.js";
 
 /**
@@ -47,6 +48,7 @@ export const createKnexUserRepository = (db) => ({
     return userMap(user);
   },
   async update(id, { email, name, role } = {}) {
+    if (isVoid({ email, name, role })) return this.findById(id);
 
     const [user] = await db("users")
       .where("id", id)
