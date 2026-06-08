@@ -32,7 +32,11 @@ export const createKnexCommentRepository = (db) => ({
     };
   },
   async findById(id) {
-    const comment = await db("comments").select("*").where("id", id).first();
+    const comment = await db("comments as c")
+      .select("c.*", "u.name as author_name")
+      .leftJoin("users as u", "u.id", "c.author_id")
+      .where("c.id", id)
+      .first();
 
     if (!comment) return null;
 
