@@ -1,3 +1,5 @@
+import { userMap, usersMap } from "./user.mapper.knex.js";
+
 /**
  * @returns {import('../interfaces.js').UserRepository}
  */
@@ -20,7 +22,7 @@ export const createKnexUserRepository = (db) => ({
     const [{ count }] = await countQ.count();
 
     return {
-      data,
+      data: usersMap(data),
       total: Number(count),
       page,
       limit,
@@ -28,7 +30,10 @@ export const createKnexUserRepository = (db) => ({
   },
   async findById(id) {
     const user = await db("users").where("id", id).first();
-    return user ?? null;
+
+    if (!user) return null;
+
+    return userMap(user);
   },
   async create({ email, name, role } = {}) {
     const [user] = await db("users")
@@ -39,11 +44,9 @@ export const createKnexUserRepository = (db) => ({
       })
       .returning("*");
 
-    return user;
+    return userMap(user);
   },
   async update(id, { email, name, role } = {}) {
-    const existing = await db("users").where("id", id).first();
-    if (!existing) return null;
 
     const [user] = await db("users")
       .where("id", id)
@@ -54,7 +57,7 @@ export const createKnexUserRepository = (db) => ({
       })
       .returning("*");
 
-    return user ?? null;
+    return user ? userMap(user) : null;
   },
   async remove(id) {
     const deleted = await db("users").where("id", id).delete();
