@@ -1,24 +1,24 @@
 export const postAllMap = (posts) =>
   posts.map((p) => ({
     id: p.id,
-    user_id: p.user_id,
+    userId: p.userId,
     title: p.title,
     body: p.body,
     status: p.status,
-    created_at: p.created_at,
-    updated_at: p.updated_at,
-    author_name: p.user?.name,
-    comments_count: p._count?.comment ?? 0,
+    createdAt: p.createdAt,
+    updatedAt: p.updatedAt,
+    authorName: p.user?.name,
+    commentsCount: p._count?.comments ?? 0,
   }));
 
 export const postByIdMap = (p) => ({
   id: p.id,
-  user_id: p.user_id,
+  userId: p.userId,
   title: p.title,
   body: p.body,
   status: p.status,
-  created_at: p.created_at,
-  updated_at: p.updated_at,
+  createdAt: p.createdAt,
+  updatedAt: p.updatedAt,
   author: p.user
     ? {
         id: p.user.id,
@@ -26,13 +26,13 @@ export const postByIdMap = (p) => ({
         email: p.user.email,
       }
     : null,
-  comments: (p.comment || []).map((c) => ({
+  comments: (p.comments || []).map((c) => ({
     id: c.id,
-    post_id: c.post_id,
-    author_id: c.author_id,
+    postId: c.postId,
+    authorId: c.authorId,
     body: c.body,
-    created_at: c.created_at,
-    author_name: c.author?.name,
+    createdAt: c.createdAt,
+    authorName: c.author?.name,
   })),
   tags: (p.postTags || []).map((pt) => ({
     id: pt.tag.id,

@@ -5,14 +5,14 @@ import { postByIdMap, postAllMap } from "./post.mapper.prisma.js";
  * @returns {import('../../interfaces.js').PostRepository}
  */
 export const createPrismaPostRepository = () => ({
-  async findAll({ status, userId, tagId, page = 1, limit = 20 }) {
+  async findAll({ status, userId, tagId, page = 1, limit = 20 } = {}) {
     const where = {};
     if (status) where.status = status;
-    if (userId) where.user_id = userId;
+    if (userId) where.userId = userId;
     if (tagId)
       where.postTags = {
         some: {
-          tag_id: tagId,
+          tagId: tagId,
         },
       };
 
@@ -22,16 +22,16 @@ export const createPrismaPostRepository = () => ({
         take: limit,
         skip: (page - 1) * limit,
         orderBy: {
-          created_at: "desc",
+          createdAt: "desc",
         },
         select: {
           id: true,
-          user_id: true,
+          userId: true,
           title: true,
           body: true,
           status: true,
-          created_at: true,
-          updated_at: true,
+          createdAt: true,
+          updatedAt: true,
           user: {
             select: {
               name: true,
@@ -39,7 +39,7 @@ export const createPrismaPostRepository = () => ({
           },
           _count: {
             select: {
-              comment: true,
+              comments: true,
             },
           },
         },
@@ -64,7 +64,7 @@ export const createPrismaPostRepository = () => ({
             tag: true,
           },
         },
-        comment: {
+        comments: {
           include: {
             author: true,
           },
@@ -78,7 +78,7 @@ export const createPrismaPostRepository = () => ({
   async create({ userId, title, body, status }) {
     const post = await prisma.post.create({
       data: {
-        user_id: userId,
+        userId: userId,
         title,
         body,
         status,
@@ -90,7 +90,7 @@ export const createPrismaPostRepository = () => ({
     const post = await prisma.$transaction(async (tx) => {
       const post = await tx.post.create({
         data: {
-          user_id: userId,
+          userId: userId,
           title,
           body,
           status,
@@ -99,33 +99,32 @@ export const createPrismaPostRepository = () => ({
 
       if (tagIds.length > 0)
         await tx.postTag.createMany({
-          data: tagIds.map((tag_id) => ({
-            post_id: post.id,
-            tag_id,
+          data: tagIds.map((tagId) => ({
+            postId: post.id,
+            tagId,
           })),
         });
 
-      return await tx.post.findUnique({
-        where: { id: post.id },
-        include: { postTags: true, user: true },
-      });
+      return post;
     });
 
     return this.findById(post.id);
   },
   async update(id, { title, body, status }) {
-    const existing = await prisma.post.findUnique({ where: { id } });
-    if (!existing) return null;
-
-    const post = await prisma.post.update({
-      where: { id },
-      data: {
-        title,
-        body,
-        status,
-      },
-    });
-    return post;
+    try {
+      const post = await prisma.post.update({
+        where: { id },
+        data: {
+          title,
+          body,
+          status,
+        },
+      });
+      return post;
+    } catch (e) {
+      if (e.code === "P2025") return null;
+      throw e;
+    }
   },
   async remove(id) {
     try {

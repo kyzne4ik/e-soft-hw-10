@@ -6,7 +6,7 @@ const BENCH = { NPLUS1: "[nplus1]", INCLUDE: "[include]" };
 console.time(BENCH.NPLUS1);
 const posts_bad = await prisma.post.findMany();
 for (const post of posts_bad) {
-  const user = await prisma.user.findUnique({ where: { id: post.user_id } });
+  const user = await prisma.user.findUnique({ where: { id: post.userId } });
 
   console.log(`"${post.title}" by ${user.name}`);
 }

@@ -30,9 +30,9 @@ export const createPrismaTagRepository = () => ({
   async attachToPost(postId, tagId) {
     const existing = await prisma.postTag.findUnique({
       where: {
-        post_id_tag_id: {
-          post_id: postId,
-          tag_id: tagId,
+        postId_tagId: {
+          postId,
+          tagId,
         },
       },
     });
@@ -41,17 +41,17 @@ export const createPrismaTagRepository = () => ({
 
     await prisma.postTag.create({
       data: {
-        post_id: postId,
-        tag_id: tagId,
+        postId,
+        tagId,
       },
     });
   },
   async detachFromPost(postId, tagId) {
     const existing = await prisma.postTag.findUnique({
       where: {
-        post_id_tag_id: {
-          post_id: postId,
-          tag_id: tagId,
+        postId_tagId: {
+          postId,
+          tagId,
         },
       },
     });
@@ -61,9 +61,9 @@ export const createPrismaTagRepository = () => ({
     try {
       await prisma.postTag.delete({
         where: {
-          post_id_tag_id: {
-            post_id: postId,
-            tag_id: tagId,
+          postId_tagId: {
+            postId,
+            tagId,
           },
         },
       });

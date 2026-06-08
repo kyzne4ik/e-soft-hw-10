@@ -14,7 +14,7 @@ export const createPrismaUserRepository = () => ({
         skip: (page - 1) * limit,
         take: limit,
         orderBy: {
-          created_at: "desc",
+          createdAt: "desc",
         },
       }),
       prisma.user.count({ where }),
@@ -45,19 +45,21 @@ export const createPrismaUserRepository = () => ({
     return user;
   },
   async update(id, { email, name, role }) {
-    const existing = await prisma.user.findUnique({ where: { id } });
-    if (!existing) return null;
+    try {
+      const user = await prisma.user.update({
+        where: { id },
+        data: {
+          email,
+          name,
+          role,
+        },
+      });
 
-    const user = await prisma.user.update({
-      where: { id },
-      data: {
-        email,
-        name,
-        role,
-      },
-    });
-
-    return user;
+      return user;
+    } catch (e) {
+      if (e.code === "P2025") return null;
+      throw e;
+    }
   },
   async remove(id) {
     try {

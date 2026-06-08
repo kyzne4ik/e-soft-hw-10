@@ -47,7 +47,7 @@ async function main() {
     for (let postNum = 0; postNum < 2; postNum++) {
       const post = await prisma.post.create({
         data: {
-          user_id: user.id,
+          userId: user.id,
           title: `Post ${postNum + 1} by ${user.name}`,
           body: `Content of ${user.name}'s post #${postNum + 1}`,
         },
@@ -56,8 +56,8 @@ async function main() {
       for (let commentNum = 0; commentNum < 2; commentNum++) {
         await prisma.comment.create({
           data: {
-            post_id: post.id,
-            author_id: user.id,
+            postId: post.id,
+            authorId: user.id,
             body: `Comment ${commentNum + 1} on post ${post.id}`,
           },
         });
@@ -65,8 +65,8 @@ async function main() {
 
       await prisma.postTag.create({
         data: {
-          post_id: post.id,
-          tag_id: tags[i].id,
+          postId: post.id,
+          tagId: tags[i].id,
         },
       });
     }

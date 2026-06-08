@@ -7,12 +7,12 @@ import { commentMap } from "./comment.mapper.prisma.js";
 export const createPrismaCommentRepository = () => ({
   async findAll({ postId, page = 1, limit = 20 } = {}) {
     const where = {};
-    if (postId) where.post_id = postId;
+    if (postId) where.postId = postId;
 
     const [comments, total] = await Promise.all([
       prisma.comment.findMany({
         where,
-        orderBy: { created_at: "desc" },
+        orderBy: { createdAt: "desc" },
         skip: (page - 1) * limit,
         take: limit,
         include: {
@@ -52,8 +52,8 @@ export const createPrismaCommentRepository = () => ({
   async create({ postId, authorId, body } = {}) {
     const comment = await prisma.comment.create({
       data: {
-        post_id: postId,
-        author_id: authorId,
+        postId,
+        authorId,
         body,
       },
       include: {
