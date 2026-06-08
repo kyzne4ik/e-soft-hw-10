@@ -9,15 +9,27 @@ async function run100(func) {
   }
 }
 
-// ============== PRISMA =================
-console.time(BENCH.PRISMA);
-await run100(() => prisma.post.findMany());
-console.timeEnd(BENCH.PRISMA);
+async function main() {
+  // ============== PRISMA =================
+  console.time(BENCH.PRISMA);
+  await run100(() => prisma.post.findMany());
+  console.timeEnd(BENCH.PRISMA);
 
-// ============== KNEX ===================
-console.time(BENCH.KNEX);
-await run100(() => db("posts").select("*"));
-console.timeEnd(BENCH.KNEX);
+  // ============== KNEX ===================
+  console.time(BENCH.KNEX);
+  await run100(() => db("posts").select("*"));
+  console.timeEnd(BENCH.KNEX);
+}
+
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+    await db.destroy();
+  });
 
 // ============== RESULT =================
 /*
@@ -32,7 +44,7 @@ console.timeEnd(BENCH.KNEX);
   NODE_ENV=development node /home/nesk/projects/e-soft/e-soft-hw-10/src/demos/benchmark.js
   [bench]-[ prisma ]: 144.703ms
   [bench]-[ knex ]: 44.426ms
-  
+
 */
 
 // Как итог, скажу, что призма крутая, типобезопасная,

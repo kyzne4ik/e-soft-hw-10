@@ -1,39 +1,52 @@
 import { prisma } from "../prisma.js";
+import { db } from "../db.js";
 
 const BENCH = { NPLUS1: "[nplus1]", INCLUDE: "[include]" };
 
-// ============= N+1 ==============
-console.time(BENCH.NPLUS1);
-const posts_bad = await prisma.post.findMany();
-for (const post of posts_bad) {
-  const user = await prisma.user.findUnique({ where: { id: post.userId } });
+async function main() {
+  // ============= N+1 ==============
+  console.time(BENCH.NPLUS1);
+  const posts_bad = await prisma.post.findMany();
+  for (const post of posts_bad) {
+    const user = await prisma.user.findUnique({ where: { id: post.userId } });
 
-  console.log(`"${post.title}" by ${user.name}`);
-}
-console.timeEnd(BENCH.NPLUS1);
+    console.log(`"${post.title}" by ${user.name}`);
+  }
+  console.timeEnd(BENCH.NPLUS1);
 
-// ============= INCLUDE ==============
-console.time(BENCH.INCLUDE);
-const posts_good = await prisma.post.findMany({
-  include: {
-    user: {
-      select: {
-        name: true,
+  // ============= INCLUDE ==============
+  console.time(BENCH.INCLUDE);
+  const posts_good = await prisma.post.findMany({
+    include: {
+      user: {
+        select: {
+          name: true,
+        },
       },
     },
-  },
-});
-for (const post of posts_good) {
-  console.log(`"${post.title}" by ${post.user.name}`);
+  });
+  for (const post of posts_good) {
+    console.log(`"${post.title}" by ${post.user.name}`);
+  }
+  console.timeEnd(BENCH.INCLUDE);
 }
-console.timeEnd(BENCH.INCLUDE);
+
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+    await db.destroy();
+  });
 
 /* Сравните время и количество запросов (включите log: ['query']).
 
-  Исходя из результатов (которые ниже) наглядно видно, 
+  Исходя из результатов (которые ниже) наглядно видно,
   что используя JOIN в include, чтобы получить всех нужных пользователей за один раз гораздо быстрее,
   чем если бы мы в n+1 выполняли один запрос на посты и затем отдельный запрос для каждого пользователя.
-  
+
   Кол-во запросов:
   |    n + 1   |   include   |
   |      31    |      2      |
@@ -48,7 +61,7 @@ console.timeEnd(BENCH.INCLUDE);
 
   ...
   [nplus1]: 76.281ms
-  
+
   ...
   [include]: 3.336ms
 
