@@ -33,7 +33,7 @@ model Post {
   id        Int      @id @default(autoincrement())
   userId    Int      @map("user_id")
   title     String   @db.VarChar(300)
-  body      String   @db.Text
+  body      String?   @db.Text
   status    String   @default("draft") @db.VarChar(20) //draft|published 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
