@@ -11,6 +11,12 @@
     "migrate:rollback": "knex migrate:rollback --knexfile knexfile.js",
     "migrate:make": "knex migrate:make --knexfile knexfile.js",
     "seed": "knex seed:run --knexfile knexfile.js",
+    "seed:drizzle": "node src/drizzle/seed.js",
+    "seed:kysely": "node src/kysely/seed.js",
+    "drizzle:generate": "drizzle-kit generate",
+    "drizzle:migrate": "node src/drizzle/migrate.js",
+    "kysely:migrate": "node src/kysely/migrate.js",
+    "kysely:rollback": "node src/kysely/migrate.js down",
     "demo:nplus1": "node src/demos/n-plus-one.js",
     "demo:benchmark": "node src/demos/benchmark.js"
   },
@@ -19,13 +25,16 @@
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^6.19.3",
     "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.45.2",
     "fastify": "^5.1.0",
     "knex": "^3.2.10",
+    "kysely": "^0.28.17",
     "pg": "^8.21.0",
     "prisma": "^6.19.3",
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "drizzle-kit": "^0.31.10",
     "nodemon": "^3.1.9",
     "pino-pretty": "^13.0.0"
   },
